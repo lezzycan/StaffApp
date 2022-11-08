@@ -18,6 +18,10 @@ class UsersViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  UsersViewModel() {
+    getUsers();
+  }
+  // getUsers can also be gottem from the ui
   setUsersListModel(List<UsersListModel> usersListModel) {
     _usersListModel = usersListModel;
   }
@@ -33,5 +37,13 @@ class UsersViewModel extends ChangeNotifier {
     if (response is Success) {
       setUsersListModel(response.response as List<UsersListModel>);
     }
+    if (response is Failure) {
+      UserError userError = UserError(
+        code: response.code,
+        message: response.errorResponse.toString(),
+      );
+      setUserError(userError);
+    }
+    setLoading(false);
   }
 }
